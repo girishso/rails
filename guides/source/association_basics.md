@@ -827,6 +827,7 @@ The `belongs_to` association supports these options:
 * `:counter_cache`
 * `:dependent`
 * `:foreign_key`
+* `:primary_key`
 * `:inverse_of`
 * `:polymorphic`
 * `:touch`
@@ -907,6 +908,20 @@ end
 ```
 
 TIP: In any case, Rails will not create foreign key columns for you. You need to explicitly define them as part of your migrations.
+
+##### `:primary_key`
+
+By convention, Rails assumes that the column used to hold the primary key of the association is id. You can override this and explicitly specify the primary key with the `:primary_key` option.
+
+Let's say that orders table has id as the primary key but it also has guid column. And the requirement is that customers table should hold guid column value and not id value. This can be achieved like this
+
+```ruby
+class Order < ActiveRecord::Base
+  belongs_to :customer, primary_key: "guid"
+end
+```
+
+Now if we execute `@customer.orders.create` then `@order` record will have `customer_id` value as the guid value of `@order`.
 
 ##### `:inverse_of`
 
